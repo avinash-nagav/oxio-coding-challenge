@@ -13,7 +13,7 @@ import {
   throwError,
 } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { Post } from '../models/post';
+import { Post, PostRequest } from '../models/post';
 
 @Injectable({ providedIn: 'root' })
 export class PostService {
@@ -63,6 +63,22 @@ export class PostService {
         });
       })
     );
+  }
+
+  public addPost(postRequest: PostRequest): Observable<Post> {
+    const url = `${environment.apiUrl}/posts`;
+    return this.http
+      .post<Post>(url, postRequest)
+      .pipe(
+        tap((result) => {
+          const posts = this.cachedPost.value.length
+            ? [result, ...this.cachedPost.value]
+            : [];
+
+          this.cachedPost.next(posts);
+        })
+      )
+      .pipe(catchError((err) => throwError(() => err)));
   }
 
   public getAllCurrentPosts(): Observable<Post[]> {

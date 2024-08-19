@@ -3,6 +3,9 @@
     <mat-card-title>Posts By Users</mat-card-title>
   </mat-card-header>
  <mat-card-content>
+  <div class="d-flex justify-content-end mb-4">
+    <button mat-flat-button color="primary" (click)="showAddPostModal()">Add Post</button>
+  </div>
   <div class="table-content">
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
       <ng-container matColumnDef="userId">
@@ -11,7 +14,7 @@
       </ng-container>
     
       <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Post Id </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Post id </th>
         <td mat-cell *matCellDef="let element"> {{element.id}} </td>
       </ng-container>
     
