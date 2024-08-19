@@ -1,16 +1,48 @@
-import { Component, OnInit } from '@angular/core';
+import { BaseChartDirective } from 'ng2-charts';
+import { ChartDataset, ChartOptions } from 'chart.js';
+import { PostService } from '../services/post.service';
+import { Component, inject, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-post-visualization',
+  selector: 'app-employee-visualization',
   templateUrl: './post-visualization.component.html',
   styleUrls: ['./post-visualization.component.css'],
-  standalone: true
+  standalone: true,
+  imports: [BaseChartDirective],
 })
 export class PostVisualizationComponent implements OnInit {
-
-  constructor() { }
+  private postService = inject(PostService);
+  barChartOptions: ChartOptions = {
+    responsive: true,
+  };
+  barChartLabels: string[] = [];
+  barChartLegend = true;
+  barChartPlugins = [];
+  barChartData: ChartDataset[] = [{ data: [], label: 'Posts count' }];
 
   ngOnInit() {
+    this.populateBarDetails();
   }
 
+  private populateBarDetails(): void {
+    this.postService
+      .getPostsAndUserDetails()
+      .subscribe((result: Array<any>) => {
+        this.barChartLabels = Array.from([
+          ...new Set(result.map((res) => res.userName)),
+        ]);
+        const postByUser = result.reduce(
+          (posts: { [key: string]: number }, currentPost) => {
+            if (posts[currentPost.userName]) {
+              posts[currentPost.userName]++;
+            } else {
+              posts[currentPost.userName] = 1;
+            }
+            return posts;
+          },
+          {}
+        );
+        this.barChartData[0].data = Object.values(postByUser);
+      });
+  }
 }
