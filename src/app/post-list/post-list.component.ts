@@ -5,6 +5,7 @@ import { Post } from '../models/post';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
+import { AddPostComponent } from './add-post/add-post.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
@@ -20,6 +21,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
     MatPaginatorModule,
     MatSortModule,
     MatButtonModule,
+    AddPostComponent,
     MatDialogModule,
   ],
 })
@@ -45,4 +47,9 @@ export class PostListComponent implements OnInit {
     });
   }
 
+  public showAddPostModal(): void {
+    this.dialog.open(AddPostComponent, {
+      width: '500px',
+    });
+  }
 }
