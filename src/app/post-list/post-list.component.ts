@@ -9,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-post-list',
+  selector: 'app-employees-list',
   templateUrl: './post-list.component.html',
   styleUrls: ['./post-list.component.css'],
   standalone: true,
@@ -38,8 +38,11 @@ export class PostListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.postService.getAllPosts().subscribe(data=> this.dataSource.data = data);
- 
+    this.postService.getAllCurrentPosts().subscribe();
+    this.postService.getAllCurrentUsers().subscribe();
+    this.postService.cachedPost.subscribe((data) => {
+      this.dataSource.data = data;
+    });
   }
 
 }
